@@ -1,0 +1,28 @@
+name: Daily CRM Lead Scraper
+on:
+  schedule:
+    - cron: '0 0 * * *' # ہر رات 12 بجے چلے گا
+  workflow_dispatch: # مینوئل چلانے کے لیے
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4
+      - name: Run scraper
+        run: python scraper.py
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "Umair-Bot"
+          git config --global user.email "umair@example.com"
+          git add crm_leads.csv
+          git commit -m "Updated leads"
+          git push
+
